@@ -12,9 +12,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Default notifier - queues the package's own SystemErrorMail to the
+ * Default notifier - sends the package's own SystemErrorMail to the
  * configured recipients. Bound unless the host app registers its own
  * ErrorNotifier (e.g. to send through a branded Mailable).
+ *
+ * Sends synchronously (not ->queue()) because this already runs inside
+ * AnalyzeAndNotifySystemErrorJob, which is itself queued and NotTenantAware -
+ * queuing the Mailable would create a second job that isn't tenant-aware-safe
+ * on its own and gets rejected by Spatie's tenant-aware queue middleware.
  */
 final class MailErrorNotifier implements ErrorNotifier
 {
@@ -34,6 +39,6 @@ final class MailErrorNotifier implements ErrorNotifier
             return;
         }
 
-        Mail::to($recipients)->queue(new SystemErrorMail($error, $analysis));
+        Mail::to($recipients)->send(new SystemErrorMail($error, $analysis));
     }
 }

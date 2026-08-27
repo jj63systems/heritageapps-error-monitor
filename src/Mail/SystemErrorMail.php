@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace HeritageApps\ErrorMonitor\Mail;
 
 use HeritageApps\ErrorMonitor\Models\SystemError;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 
-class SystemErrorMail extends Mailable implements ShouldQueue
+/**
+ * Sent synchronously from within AnalyzeAndNotifySystemErrorJob, which is
+ * already NotTenantAware - never dispatch this Mailable via ->queue()
+ * directly, as the resulting job isn't tenant-aware-safe on its own and
+ * Spatie's tenant-aware queue middleware will reject it.
+ */
+class SystemErrorMail extends Mailable
 {
-    use Queueable, SerializesModels;
-
     public function __construct(
         public readonly SystemError $error,
         public readonly ?string $analysis,
