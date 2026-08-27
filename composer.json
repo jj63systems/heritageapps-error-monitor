@@ -1,0 +1,44 @@
+{
+    "name": "heritageapps/error-monitor",
+    "description": "Shared system-error capture, AI diagnosis, and email alerting for HeritageApps applications",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "HeritageApps\\ErrorMonitor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HeritageApps\\ErrorMonitor\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "illuminate/support": "^12.0",
+        "illuminate/database": "^12.0",
+        "illuminate/http": "^12.0",
+        "illuminate/mail": "^12.0",
+        "illuminate/queue": "^12.0",
+        "spatie/laravel-multitenancy": "^4.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "orchestra/testbench": "^10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HeritageApps\\ErrorMonitor\\Providers\\ErrorMonitorServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
